@@ -126,10 +126,89 @@ include 'template/nav-side.php';
                                         <td><?= $data['c4']; ?></td>
                                         <td><?= $data['c5']; ?></td>
                                         <td align="center">
-                                            <button class="btn btn-warning sm"><i class="far fa-edit"></i></button>
-                                            <button class="btn btn-danger sm"><i class="far fa-trash-alt"></i></button>
+                                            <button type="button" class="btn btn-warning sm" data-toggle="modal" data-target="#editModal<?= $data['id_bobot']; ?>"><i class="far fa-edit"></i></button>
+                                            <button type="button" class="btn btn-danger sm" data-toggle="modal" data-target="#deleteModal<?= $data['id_bobot']; ?>"><i class="far fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
+                                    <!-- Modal edit -->
+                                    <div class="modal fade" id="editModal<?= $data['id_bobot']; ?>" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit Data Bobot Kriteria</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="" method="post">
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="id">ID Pembobotan</label>
+                                                            <input type="text" class="form-control" name="idbobot" id="id" value="<?= $data['id_bobot']; ?>" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="kode">Alternatif</label>
+                                                            <input type="text" class="form-control" id="kode" value="<?= $data['alternatif']; ?>" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="C1">C1 Jumlah Siswa per Kelas</label>
+                                                            <input type="text" class="form-control" name="c1" id="C1" value="<?= $data['c1']; ?>" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="C2">C2 Fasilitas (100-500)</label>
+                                                            <input type="number" min="100" max="500" class="form-control" name="c2" id="C2" value="<?= $data['c2']; ?>" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="C3">C3 Adiwiyata (10-100)</label>
+                                                            <input type="number" min="10" max="100" class="form-control" name="c3" id="C3" value="<?= $data['c3']; ?>" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="C4">C4 Presentase Lulus UN (0-100%)</label>
+                                                            <input type="number" min="0" max="100" class="form-control" name="c4" id="C4" value="<?= $data['c4']; ?>" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>C5 Akreditasi</label>
+                                                            <select name="c5" class="form-control" required>
+                                                                <option>1</option>
+                                                                <option>2</option>
+                                                                <option>3</option>
+                                                                <option>4</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="submit" name="edit_bobot" class="btn btn-primary">Edit Data</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- tutup modal -->
+                                    <!-- Modal delete -->
+                                    <div class="modal fade" id="deleteModal<?= $data['id_bobot']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Delete Data</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="" method="post">
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="idbobot" value="<?= $data['id_bobot']; ?>">
+                                                        <p>Apakah anda Yakin akan menghapus id(<?= $data['id_bobot']; ?>) ini ?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="submit" name="delete_id" class="btn btn-danger">Delete</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- tutup modal -->
                                 <?php } ?>
                             </tbody>
                         </table>
@@ -173,6 +252,46 @@ if (isset($_POST['add_bobot'])) {
                 alert('data alternatif sudah di ada, silahkan pilih data lain !!!');
                 document.location.href = 'bobot.php';
                 </script>";
+    }
+}
+
+// edit data bobot
+if (isset($_POST['edit_bobot'])) {
+    $idbobot = $_POST['idbobot'];
+    $c1 = $_POST['c1'];
+    $c2 = $_POST['c2'];
+    $c3 = $_POST['c3'];
+    $c4 = $_POST['c4'];
+    $c5 = $_POST['c5'];
+
+    mysqli_query($koneksi, "UPDATE bobot SET c1=$c1, c2=$c2, c3=$c3, c4=$c4, c5=$c5 WHERE id_bobot=$idbobot");
+    if (mysqli_affected_rows($koneksi) > 0) {
+        echo "<script>
+            alert('data berhasil di edit');
+            document.location.href = 'bobot.php';
+            </script>";
+    } else {
+        echo "<script>
+            alert('data gagal di edit');
+            document.location.href = 'bobot.php';
+            </script>";
+    }
+}
+
+// fungsi delete tabel alternatif
+if (isset($_POST['delete_id'])) {
+    $id = $_POST['idbobot'];
+    mysqli_query($koneksi, "DELETE FROM bobot WHERE id_bobot=$id");
+    if (mysqli_affected_rows($koneksi) > 0) {
+        echo "<script>
+            alert('data berhasil di hapus');
+            document.location.href = 'bobot.php';
+            </script>";
+    } else {
+        echo "<script>
+            alert('data gagal di hapus');
+            document.location.href = 'bobot.php';
+            </script>";
     }
 }
 
