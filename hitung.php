@@ -275,7 +275,7 @@ include 'template/nav-side.php';
                                 for ($i = 0; $i < $alter; $i++) {
                                     if ($i == 0) {
                                         echo '<tr><td>' . $no++ . '</td>';
-                                        echo '<td>' . $get_alternatif[0][array_search(end($resultvi), $resultvi)] . '</td>';
+                                        echo '<td>' . $get_alternatif[array_search(end($resultvi), $resultvi)][0] . '</td>';
                                         echo '<td>' . current($resultvi) . '</td></tr>';
                                     } elseif ($i == ($alter - 1)) {
                                         echo '<tr><td>' . $no++ . '</td>';
